@@ -16,6 +16,7 @@ See the Mulan PSL v2 for more details. */
 #include "common/log/log.h"
 #include "storage/db/db.h"
 #include "storage/table/table.h"
+#include <iostream>
 
 InsertStmt::InsertStmt(Table *table, const Value *values, int value_amount)
     : table_(table), values_(values), value_amount_(value_amount)
@@ -58,8 +59,33 @@ RC InsertStmt::create(Db *db, const InsertSqlNode &inserts, Stmt *&stmt)
           table_name, field_meta->name(), field_type, value_type);
       return RC::SCHEMA_FIELD_TYPE_MISMATCH;
     }
+    else if(field_type==DATES)
+    {
+      std::cout << "1\n";
+      int val=values[i].get_date();
+      std::cout << "2\n";
+      std::cout<<"val="<<val<<"\n";
+      int year=val/10000,month=(val/100)%100,day=val%100;
+      std::cout << "Year: " << year <<", Mon: " << month << ", Day: " << day;
+      if(year<1970||year>2039) return RC::SCHEMA_FIELD_TYPE_MISMATCH;
+      std::cout << "4\n";
+      if(year==2038&&month>3)  return RC::SCHEMA_FIELD_TYPE_MISMATCH;
+      std::cout << "5\n";
+      if(month<1||month>12) return RC::SCHEMA_FIELD_TYPE_MISMATCH;
+      std::cout << "6\n";
+      int month_to_day[15]={0,31,29,31,30,31,30,31,31,30,31,30,31};
+      if(day<0||day>month_to_day[month]) return RC::SCHEMA_FIELD_TYPE_MISMATCH;
+      std::cout << "7\n";
+      if(month==2&&day==29)
+      {
+        if(year%4!=0) return RC::SCHEMA_FIELD_TYPE_MISMATCH;
+        std::cout << "8\n";
+        if(year%100==0&&year%400!=0) return RC::SCHEMA_FIELD_TYPE_MISMATCH;
+        std::cout << "9\n";
+      }
+      std::cout << "10\n";
+    }
   }
-
   // everything alright
   stmt = new InsertStmt(table, values, value_num);
   return RC::SUCCESS;
