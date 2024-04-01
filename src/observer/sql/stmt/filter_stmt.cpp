@@ -128,9 +128,9 @@ RC FilterStmt::create_filter_unit(Db *db, Table *default_table, std::unordered_m
    if(condition.right_value.attr_type()==DATES)
   {
     int val=condition.right_value.get_date();
-    //std::cout<<val<<'\n';
+  
     int year=val/10000,month=(val/100)%100,day=val%100;
-    //std::cout<<year<<" "<<month<<" "<<day<<'\n';
+
     if(year<1970||year>2039) return RC::SCHEMA_FIELD_TYPE_MISMATCH;
     if(year==2038&&month>3)  return RC::SCHEMA_FIELD_TYPE_MISMATCH;
     if(month<1||month>12) return RC::SCHEMA_FIELD_TYPE_MISMATCH;

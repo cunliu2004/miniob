@@ -94,7 +94,7 @@ Value::Value(const char* date, int len,int flag) {
         return;
     } 
     val = year * 10000 + month * 100 + day;
-  std::cout<<"this is in value.cpp"<<val<<"\n";
+
   set_date(val);
 }
 void Value::set_data(char *data, int length)
