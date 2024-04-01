@@ -223,7 +223,7 @@ std::string Value::to_string() const
           os<<'0'<<month<<'-';
       else
           os<<month<<'-';
-      if (year<10)
+      if (day<10)
           os<<'0'<<day;
       else
           os<<day;
