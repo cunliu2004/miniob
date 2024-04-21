@@ -19,11 +19,11 @@ See the Mulan PSL v2 for more details. */
 #include "common/lang/comparator.h"
 #include "common/lang/string.h"
 
-const char *ATTR_TYPE_NAME[] = {"undefined", "chars", "ints" ,"floats","dates", "booleans"};
+const char *ATTR_TYPE_NAME[] = {"undefined", "chars", "ints" ,"dates","floats", "booleans"};
 
 const char *attr_type_to_string(AttrType type)
 {
-  if (type >= UNDEFINED && type <= DATES) {
+  if (type >= UNDEFINED && type <= FLOATS) {
     return ATTR_TYPE_NAME[type];
   }
   return "unknown";

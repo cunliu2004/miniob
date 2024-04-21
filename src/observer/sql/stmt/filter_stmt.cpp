@@ -142,6 +142,6 @@ RC FilterStmt::create_filter_unit(Db *db, Table *default_table, std::unordered_m
       if(year%100==0&&year%400!=0) return RC::SCHEMA_FIELD_TYPE_MISMATCH;
     }
   }
-  // 检查两个类型是否能够比较
+  
   return rc;
 }

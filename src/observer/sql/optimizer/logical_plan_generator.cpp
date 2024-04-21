@@ -32,7 +32,7 @@ See the Mulan PSL v2 for more details. */
 #include "sql/stmt/insert_stmt.h"
 #include "sql/stmt/delete_stmt.h"
 #include "sql/stmt/explain_stmt.h"
-
+#include"sql/operator/aggregate_logical_operator.h"
 using namespace std;
 
 RC LogicalPlanGenerator::create(Stmt *stmt, unique_ptr<LogicalOperator> &logical_operator)
@@ -120,8 +120,24 @@ RC LogicalPlanGenerator::create_plan(
       project_oper->add_child(std::move(table_oper));
     }
   }
+  
 
-  logical_operator.swap(project_oper);
+  bool aggr_flag=false;
+  for(auto field:all_fields){
+    if(field.aggregation()!=AggrOp::AGGR_NONE){
+      aggr_flag=true;
+      break;
+    }
+  }
+  if(aggr_flag){
+    unique_ptr<LogicalOperator>aggregate_oper(new AggregateLogicalOperator(all_fields));
+    aggregate_oper->add_child(std::move(project_oper));
+    logical_operator.swap(aggregate_oper);
+  }
+  else{
+    logical_operator.swap(project_oper);
+  }
+  //logical_operator.swap(project_oper);
   return RC::SUCCESS;
 }
 

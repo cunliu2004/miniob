@@ -55,6 +55,11 @@ ArithmeticExpr *create_arithmetic_expression(ArithmeticExpr::Type type,
 
 //标识tokens
 %token  SEMICOLON
+        SUM_F
+        MIN_F
+        MAX_F
+        AVG_F
+        COUNT_F
         CREATE
         DROP
         TABLE
@@ -104,6 +109,7 @@ ArithmeticExpr *create_arithmetic_expression(ArithmeticExpr::Type type,
   ParsedSqlNode *                   sql_node;
   ConditionSqlNode *                condition;
   Value *                           value;
+  enum AggrOp                      aggr;
   enum CompOp                       comp;
   RelAttrSqlNode *                  rel_attr;
   std::vector<AttrInfoSqlNode> *    attr_infos;
@@ -131,6 +137,7 @@ ArithmeticExpr *create_arithmetic_expression(ArithmeticExpr::Type type,
 %type <condition>           condition
 %type <value>               value
 %type <number>              number
+%type <aggr>                aggr_op
 %type <comp>                comp_op
 %type <rel_attr>            rel_attr
 %type <attr_infos>          attr_def_list
@@ -515,7 +522,23 @@ select_attr:
       delete $1;
     }
     ;
-
+aggr_op:
+    SUM_F{
+      $$=AGGR_SUM;
+    }
+    | MIN_F{
+      $$=AGGR_MIN;
+    }
+    | MAX_F{
+      $$=AGGR_MAX;
+    }
+    | AVG_F{
+      $$=AGGR_AVG;
+    }
+    | COUNT_F{
+      $$=AGGR_COUNT;
+    }
+    ;
 rel_attr:
     ID {
       $$ = new RelAttrSqlNode;
@@ -528,6 +551,10 @@ rel_attr:
       $$->attribute_name = $3;
       free($1);
       free($3);
+    }
+    | aggr_op LBRACE rel_attr RBRACE{
+      $$=$3;
+      $$->aggregation=$1;
     }
     ;
 
