@@ -122,7 +122,7 @@ union YYSTYPE
   ParsedSqlNode *                   sql_node;
   ConditionSqlNode *                condition;
   Value *                           value;
-  enum AggrOp                      aggr;
+  enum AggrOp                       aggr;
   enum CompOp                       comp;
   RelAttrSqlNode *                  rel_attr;
   std::vector<AttrInfoSqlNode> *    attr_infos;
