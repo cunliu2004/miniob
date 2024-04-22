@@ -98,6 +98,13 @@ RC AggregatePhysicalOperator::next(){
           result_cells[i].set_int(j);
         }
         break;
+        case AggrOp::AGGR_COUNT_ALL:{
+          std::vector<Value>& index_column_values = AggrValues[i]; 
+          int j=index_column_values.size();
+          result_cells[i].set_type(INTS);
+          result_cells[i].set_int(j);
+        }
+        break;
         dafault:
         return RC::UNIMPLENMENT;
       }
