@@ -15,6 +15,7 @@ See the Mulan PSL v2 for more details. */
 #include <string.h>
 #include <algorithm>
 #include "common/defs.h"
+#include <climits>
 
 namespace common {
 
@@ -65,4 +66,59 @@ int compare_string(void *arg1, int arg1_max_length, void *arg2, int arg2_max_len
   return 0;
 }
 
-} // namespace common
+int compare_str_with_int(void*arg1,int arg1_max_length,void*arg2){
+    const char* s1 = (const char*)arg1;  
+    int v2 = *(int*)arg2;  
+    if (s1 == NULL || arg1_max_length <= 0) {   
+        return -1;  
+    }  
+ 
+    char *endptr;  
+    errno = 0; 
+    long long v1 = strtol(s1, &endptr, 10);  
+  
+    // 检查是否转换了整个字符串，并且没有溢出  
+    if ((errno == ERANGE && (v1 == LLONG_MAX || v1 == LLONG_MIN))  
+        || (endptr == s1) // 没有转换任何字符  
+        || (*endptr != '\0' && !isspace((unsigned char)*endptr))) { // 字符串包含非数字字符  
+
+        return -1;  
+    }  
+  
+    // 检查是否超过了 int 的范围  
+    if (v1 > INT_MAX || v1 < INT_MIN) {   
+        return -1;  
+    }   
+    int result = (int)v1 - v2;  
+    if (result > 0) {  
+        return 1;  
+    }  
+    if (result < 0) {  
+        return -1;  
+    }  
+    return 0;  
+}
+float fabs(float x) {  
+    return (x >= 0.0f) ? x : -x;  
+}
+int compare_str_with_float(void *arg1, int arg1_max_length, float *arg2) {  
+    const char *s1 = (const char *)arg1;  
+    float v2 = *arg2;  
+    float v1 = atof(s1);  
+      
+    if (s1 == NULL) {   
+        return -1;  
+    }  
+  
+    // 使用 fabs 比较浮点数的绝对值与 EPSILON  
+    float diff = fabs(v1 - v2);  
+    if (diff > EPSILON) {  
+        // 如果差值大于 EPSILON，则 v1 和 v2 不相等  
+        return (v1 > v2) ? 1 : -1; // 直接返回大于、小于的结果  
+    }  
+  
+    // 如果差值在 EPSILON 之内，则认为它们相等  
+    return 0; // v1 等于 v2（在允许的精度范围内）  
+}
+
+}

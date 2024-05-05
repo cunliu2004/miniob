@@ -110,7 +110,8 @@ MIN                                     RETURN_TOKEN(MIN_F);
 MAX                                     RETURN_TOKEN(MAX_F);
 AVG                                     RETURN_TOKEN(AVG_F);
 COUNT                                   RETURN_TOKEN(COUNT_F);
-
+INNER                                   RETURN_TOKEN(INNER);
+JOIN                                    RETURN_TOKEN(JOIN);
 COMMIT                                  RETURN_TOKEN(TRX_COMMIT);
 ROLLBACK                                RETURN_TOKEN(TRX_ROLLBACK);
 INT                                     RETURN_TOKEN(INT_T);

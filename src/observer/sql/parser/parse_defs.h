@@ -97,7 +97,11 @@ struct ConditionSqlNode
  * where 条件 conditions，这里表示使用AND串联起来多个条件。正常的SQL语句会有OR，NOT等，
  * 甚至可以包含复杂的表达式。
  */
-
+struct JoinSqlNode
+{
+  std::vector<std::string>        relations;     
+  std::vector<ConditionSqlNode>   conditions;
+};
 struct SelectSqlNode
 {
   std::vector<RelAttrSqlNode>     attributes;    ///< attributes in select clause
@@ -276,6 +280,7 @@ enum SqlCommandFlag
   SCF_INSERT,
   SCF_UPDATE,
   SCF_DELETE,
+  SCF_JOIN,
   SCF_CREATE_TABLE,
   SCF_DROP_TABLE,
   SCF_CREATE_INDEX,
@@ -307,6 +312,7 @@ public:
   InsertSqlNode             insertion;
   DeleteSqlNode             deletion;
   UpdateSqlNode             update;
+  JoinSqlNode               join;
   CreateTableSqlNode        create_table;
   DropTableSqlNode          drop_table;
   CreateIndexSqlNode        create_index;

@@ -41,7 +41,7 @@ class Value
 {
 public:
   Value() = default;
-
+  
   Value(AttrType attr_type, char *data, int length = 4) : attr_type_(attr_type)
   {
     this->set_data(data, length);
@@ -51,7 +51,7 @@ public:
   explicit Value(float val);
   explicit Value(bool val);
   explicit Value(const char *s, int len = 0);
-  explicit Value(const char *date, int len, int flag);  //lydadd
+  explicit Value(const char *date, int len, int flag);  
 
   Value(const Value &other) = default;
   Value &operator=(const Value &other) = default;
@@ -69,7 +69,7 @@ public:
   void set_float(float val);
   void set_boolean(bool val);
   void set_string(const char *s, int len = 0);
-  void set_date(int val);//lydadd
+  void set_date(int val);
   void set_value(const Value &value);
 
   std::string to_string() const;
@@ -96,7 +96,7 @@ public:
   float get_float() const;
   std::string get_string() const;
   bool get_boolean() const;
-  int get_date() const;//lydadd
+  int get_date() const;
 
 private:
   AttrType attr_type_ = UNDEFINED;
@@ -106,7 +106,7 @@ private:
     int int_value_;
     float float_value_;
     bool bool_value_;
-    int date_value_;//lydadd
+    int date_value_;
   } num_value_;
   std::string str_value_;
 };
