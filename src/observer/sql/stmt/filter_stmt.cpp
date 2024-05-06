@@ -125,7 +125,7 @@ RC FilterStmt::create_filter_unit(Db *db, Table *default_table, std::unordered_m
   }
 
   filter_unit->set_comp(comp);
-   if(condition.right_value.attr_type()==DATES)
+  if(condition.right_value.attr_type()==DATES)
   {
     int val=condition.right_value.get_date();
   
@@ -143,5 +143,5 @@ RC FilterStmt::create_filter_unit(Db *db, Table *default_table, std::unordered_m
     }
   }
   
-  return rc;
+  else return RC::SUCCESS;
 }
