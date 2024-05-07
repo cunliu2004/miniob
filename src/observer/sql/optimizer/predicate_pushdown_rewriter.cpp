@@ -11,7 +11,6 @@ See the Mulan PSL v2 for more details. */
 //
 // Created by Wangyunlai on 2022/12/30.
 //
-
 #include "sql/optimizer/predicate_pushdown_rewriter.h"
 #include "sql/operator/logical_operator.h"
 #include "sql/operator/table_get_logical_operator.h"
@@ -49,16 +48,9 @@ RC PredicatePushdownRewriter::rewrite(std::unique_ptr<LogicalOperator> &oper, bo
     return rc;
   }
   
-  if (!predicate_expr) {
-    // 所有的表达式都下推到了下层算子
-    // 这个predicate operator其实就可以不要了。但是这里没办法删除，弄一个空的表达式吧
-    LOG_TRACE("all expressions of predicate operator were pushdown to table get operator, then make a fake one");
+  
 
-    Value value((bool)true);
-    predicate_expr = std::unique_ptr<Expression>(new ValueExpr(value));
-  }
-
-  if (!pushdown_exprs.empty()) {
+  if (pushdown_exprs.empty()) {
     return rc;
   }
 

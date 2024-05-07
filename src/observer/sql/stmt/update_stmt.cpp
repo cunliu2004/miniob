@@ -23,13 +23,7 @@ UpdateStmt::UpdateStmt(Table *table, Field field,Value *values,FilterStmt*filter
     : table_(table), values_(values), field_(field),filter_stmt_(filter_stmt)
 {}
 
-UpdateStmt::~UpdateStmt()
-{
-  if (nullptr != filter_stmt_) {
-    delete filter_stmt_;
-    filter_stmt_ = nullptr;
-  }
-}
+
 RC UpdateStmt::create(Db *db, const UpdateSqlNode &update_sql, Stmt *&stmt)
 {
   if(nullptr==db){
@@ -75,7 +69,7 @@ RC UpdateStmt::create(Db *db, const UpdateSqlNode &update_sql, Stmt *&stmt)
     return rc;
   }
   Field field(table,field_meta);
-  Value values(update_sql.value);
-  stmt=new UpdateStmt(table,field,&values,filter_stmt);
+  Value value(update_sql.value);
+  stmt=new UpdateStmt(table,field,&value,filter_stmt);
   return rc;
 }
