@@ -127,7 +127,7 @@ union YYSTYPE
   enum AggrOp                       aggr;
   enum CompOp                       comp;
   RelAttrSqlNode *                  rel_attr;
-  JoinSqlNode*                      join_sql_node;
+  JoinSqlNode*                      join_list;
   std::vector<AttrInfoSqlNode> *    attr_infos;
   AttrInfoSqlNode *                 attr_info;
   Expression *                      expression;

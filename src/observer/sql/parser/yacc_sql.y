@@ -114,7 +114,7 @@ ArithmeticExpr *create_arithmetic_expression(ArithmeticExpr::Type type,
   enum AggrOp                       aggr;
   enum CompOp                       comp;
   RelAttrSqlNode *                  rel_attr;
-  JoinSqlNode*                      join_sql_node;
+  JoinSqlNode*                      join_list;
   std::vector<AttrInfoSqlNode> *    attr_infos;
   AttrInfoSqlNode *                 attr_info;
   Expression *                      expression;
@@ -147,7 +147,7 @@ ArithmeticExpr *create_arithmetic_expression(ArithmeticExpr::Type type,
 %type <attr_infos>          attr_def_list
 %type <attr_info>           attr_def
 %type <value_list>          value_list
-%type <join_sql_node>       join_list
+%type <join_list>       join_list
 %type <condition_list>      where
 %type <condition_list>      condition_list
 %type <rel_attr_list>       rel_attr_aggr_list
@@ -463,6 +463,31 @@ select_stmt:        /*  select 语句的语法解析树*/
       }
     }
     ;
+join_list:
+    /*empty*/
+    {
+      $$=nullptr;
+    }
+    | INNER join_list{
+      $$=$2;
+    }
+    | JOIN ID ON condition_list join_list{
+      $$=new JoinSqlNode();
+
+      if($4!=nullptr){
+        $$->conditions.swap(*$4);
+        delete $4;
+      }
+
+      $$->relations.push_back($2);
+      delete $2;
+
+      if($5!=nullptr){
+        $$->relations.insert($$->relations.end(),$5->relations.begin(),$5->relations.end());
+        $$->conditions.insert($$->conditions.end(),$5->conditions.begin(),$5->conditions.end());
+        delete $5;
+      }
+    }
 calc_stmt:
     CALC expression_list
     {
@@ -650,31 +675,7 @@ rel_list:
       free($2);
     }
     ;
-join_list:
-    /*empty*/
-    {
-      $$=nullptr;
-    }
-    | INNER join_list{
-      $$=$2;
-    }
-    | JOIN ID ON condition_list join_list{
-      $$=new JoinSqlNode();
 
-      if($4!=nullptr){
-        $$->conditions.swap(*$4);
-        delete $4;
-      }
-
-      $$->relations.push_back($2);
-      delete $2;
-
-      if($5!=nullptr){
-        $$->relations.insert($$->relations.end(),$5->relations.begin(),$5->relations.end());
-        $$->conditions.insert($$->conditions.end(),$5->conditions.begin(),$5->conditions.end());
-        delete $5;
-      }
-    }
 where:
     /* empty */
     {
