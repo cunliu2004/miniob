@@ -67,9 +67,9 @@ RC InsertStmt::create(Db *db, const InsertSqlNode &inserts, Stmt *&stmt)
     
       int year=val/10000,month=(val/100)%100,day=val%100;
       
-      if(year<1970||year>2039) return RC::SCHEMA_FIELD_TYPE_MISMATCH;
+      //if(year<1970||year>2039) return RC::SCHEMA_FIELD_TYPE_MISMATCH;
      
-      if(year==2038&&month>3)  return RC::SCHEMA_FIELD_TYPE_MISMATCH;
+      //if(year==2038&&month>3)  return RC::SCHEMA_FIELD_TYPE_MISMATCH;
   
       if(month<1||month>12) return RC::SCHEMA_FIELD_TYPE_MISMATCH;
      
