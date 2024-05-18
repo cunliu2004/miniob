@@ -131,8 +131,8 @@ RC FilterStmt::create_filter_unit(Db *db, Table *default_table, std::unordered_m
   
     int year=val/10000,month=(val/100)%100,day=val%100;
 
-    if(year<1970||year>2039) return RC::SCHEMA_FIELD_TYPE_MISMATCH;
-    if(year==2038&&month>3)  return RC::SCHEMA_FIELD_TYPE_MISMATCH;
+    //if(year<1970||year>2039) return RC::SCHEMA_FIELD_TYPE_MISMATCH;
+    //if(year==2038&&month>3)  return RC::SCHEMA_FIELD_TYPE_MISMATCH;
     if(month<1||month>12) return RC::SCHEMA_FIELD_TYPE_MISMATCH;
     int month_to_day[15]={0,31,29,31,30,31,30,31,31,30,31,30,31};
     if(day<0||day>month_to_day[month]) return RC::SCHEMA_FIELD_TYPE_MISMATCH;
