@@ -80,7 +80,7 @@ int compare_str_with_int(void*arg1,int arg1_max_length,void*arg2){
     return 0;
 }
 
-int compare_str_with_float(void *arg1, int arg1_max_length, float *arg2) {  
+int compare_str_with_float(void *arg1, int arg1_max_length, void *arg2) {  
     const char*s1=(const char*)arg1;
     float v2=*(int*)arg2;
     float v1=atof(s1);
