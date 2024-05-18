@@ -129,12 +129,15 @@ RC LogicalPlanGenerator::create_plan(
   
 
   bool aggr_flag=false;
+  bool aggr_fixed=false;
   for(auto field:all_fields){
-    if(field.aggregation()!=AggrOp::AGGR_NONE){
+    if(field.aggregation()==AggrOp::AGGR_NONE)
+      aggr_fixed=true;
+    else 
       aggr_flag=true;
-      break;
-    }
   }
+  if(aggr_fixed&&aggr_flag)
+    return RC::UNIMPLENMENT;
   if(aggr_flag){
     unique_ptr<LogicalOperator>aggregate_oper(new AggregateLogicalOperator(all_fields));
     aggregate_oper->add_child(std::move(project_oper));
