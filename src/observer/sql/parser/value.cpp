@@ -214,7 +214,7 @@ std::string Value::to_string() const
     case CHARS: {
       os << str_value_;
     } break;
-    case DATES:{//in here,int must be modified into string
+    case DATES:{
       int year=(num_value_.date_value_)/10000;
       int month=(num_value_.date_value_/100)%100;
       int day=(num_value_.date_value_)%100;
@@ -237,6 +237,7 @@ std::string Value::to_string() const
 
 int Value::compare(const Value &other) const
 {
+
   if (this->attr_type_ == other.attr_type_) {
     switch (this->attr_type_) {
       case INTS: {
@@ -271,24 +272,24 @@ int Value::compare(const Value &other) const
     return common::compare_float((void *)&this->num_value_.float_value_, (void *)&other_data);
   }
   else if (this->attr_type_ == CHARS && other.attr_type_ == INTS) {
+   
     float other_data=other.num_value_.int_value_;
     return common::compare_str_with_int((void *)this->str_value_.c_str(),
     this->str_value_.length(),(void *)&other_data);
   }
   else if (this->attr_type_ == INTS && other.attr_type_ == CHARS) {
-    float this_data = this->num_value_.int_value_;
-    return common::compare_str_with_int((void *)&this_data,
-    other.str_value_.length(),
-    (void *)other.str_value_.c_str());
+    return -common::compare_str_with_int((void *)other.str_value_.c_str(),
+      other.str_value_.length(),
+      (void *)&this->num_value_.int_value_);
   }
   else if (this->attr_type_ == CHARS && other.attr_type_ == FLOATS){ 
-    float other_data=other.num_value_.int_value_;
+
+    float other_data=other.num_value_.float_value_;
     return common::compare_str_with_float((void *)this->str_value_.c_str(),
     this->str_value_.length(),(void *)&other_data);
   }
   else if (this->attr_type_ == FLOATS && other.attr_type_ == CHARS){ 
-    float this_data = this->num_value_.int_value_;
-    return common::compare_str_with_float((void *)&this_data, 
+    return -common::compare_str_with_float( (void *)other.str_value_.c_str(),
     other.str_value_.length(),(void *)&this->num_value_.int_value_);
   }
   LOG_WARN("not supported");
